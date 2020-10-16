@@ -3,8 +3,37 @@
 </template>
 
 <script>
+import {
+    provide,
+    readonly,
+    ref
+} from 'vue';
+
 export default {
     name: "App",
+    setup() {
+        const ROLES = ["ANIMATOR", "CANDIDATE"];
+
+        const userRole = ref(null);
+
+        const updateUserRole = (role) => {
+            role = ROLES.indexOf(role);
+
+            if (role === -1) {
+                return new Promise((res, rej) => {
+                    rej(false);
+                });
+            } else {
+                userRole.value = role;
+                return new Promise((res) => {
+                    res(true);
+                });
+            }
+        }
+
+        provide('userRole', readonly(userRole));
+        provide('updateUserRole', updateUserRole);
+    },
 };
 </script>
 
