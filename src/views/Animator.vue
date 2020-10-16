@@ -10,7 +10,12 @@ import DefineQuestion from '../components/DefineQuestion';
 import DefineAnswers from '../components/DefineAnswers';
 
 import {
+    checkUserRole
+} from '../mixins';
+
+import {
     provide,
+    inject,
     readonly,
     ref
 } from 'vue';
@@ -26,6 +31,7 @@ TODO 5. Ecran de chargement
 */
 export default {
     name: "Animator",
+    mixins: [checkUserRole],
     components: {
         DefineQuestion,
         DefineAnswers
@@ -41,6 +47,14 @@ export default {
         const answers = ref(new Set());
         const question = ref('question');
 
+        const userRole = inject('userRole');
+
+        /**
+         * Add new answer to answers set
+         *
+         * @param {string} str the answer text
+         * @param {boolean} status True in is the good answer
+         */
         const addAnswer = (
             str,
             status = false
@@ -51,6 +65,11 @@ export default {
             });
         }
 
+        /**
+         * Update question
+         *
+         * @param {string} str the question text
+         */
         const updateQuestion = (str) => {
             question.value = str;
         }
@@ -59,13 +78,21 @@ export default {
         //     answers.value.delete(str);
         // }
 
+        // Get the answers set
         provide('answers', answers);
+
+        // Add new answer to answers set
         provide('addAnswer', addAnswer);
+
+        // Get the question 
         provide('question', readonly(question));
+
+        // Update the question
         provide('updateQuestion', updateQuestion);
 
         return {
-            updateQuestion
+            updateQuestion,
+            userRole
         }
     },
 };
