@@ -12,6 +12,7 @@ export default {
     components: {
         Role
     },
+    inject: ["updateUserRole"],
     methods: {
         roleSelected(e) {
             let role;
@@ -22,7 +23,7 @@ export default {
                 throw new Error(err);
             }
 
-            this.$store.dispatch('setUserRole', role).then((status) => {
+            this.updateUserRole(role).then((status) => {
                 if (!status) throw new Error('Role not found');
 
                 switch (role) {
